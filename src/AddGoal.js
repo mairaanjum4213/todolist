@@ -1,89 +1,63 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react';
+import './AddGoal.css'; // Import your CSS file for styling
 
 export const AddGoal = () => {
-    let goalArray=[]
-    const [goal, setGoal] = useState("");
-    const [goallist, setGoalList]= useState(goalArray);
-  
+    const [goal, setGoal] = useState('');
+    const [goalList, setGoalList] = useState([]);
 
-    const goalhandler = (event) =>{
+    const goalHandler = (event) => {
         setGoal(event.target.value);
-    }
-    
-   const addgoalhandler = (event)=>{
-   event.preventDefault();
-   if(goal===""){
-    alert("Please enter goal first");
-   }
-   
-   else{
-   setGoalList((prevlist)=>
-    [...prevlist , goal]
-   )
-   setGoal("");
-   }
-   }
-   
+    };
 
-  const removehandler = (index)=>{
- 
-    const updatedlist = goallist.filter((item,i)=>{
-          
-                return i!==index;
-            
-    }
-    )
-    setGoalList(updatedlist);
-  }
+    const addGoalHandler = (event) => {
+        event.preventDefault();
+        if (goal === '') {
+            alert('Please enter a goal first');
+        } else {
+            setGoalList((prevList) => [...prevList, goal]);
+            setGoal('');
+        }
+    };
 
-  const removeall=()=>{
-    setGoalList([]);
-  }
+    const removeHandler = (index) => {
+        const updatedList = goalList.filter((item, i) => i !== index);
+        setGoalList(updatedList);
+    };
 
-  
-  /*const edithandler=(index)=>{
-    setshowEdit(true);
-    let edititem = goallist.find((elem,id)=>{
-      return index===id;  
-    })
-    setGoal(edititem);
-    setEditIndex(index); 
-  }
+    const removeAll = () => {
+        setGoalList([]);
+    };
 
-  const updategoalHandler = ()=>{
-    goallist.splice(editIndex,1,goal);
-    setGoalList((prevlist)=>
-    [...prevlist]
-   )
-    setshowEdit(false);  
-    console.log(goallist);
-  }
-*/
-  return (
-   <div style={{background:"black"}}>
-    <div style={{justifyContent:"center", alignItems:"center",display:"flex", flexDirection:"column"}}>
-
-    <h1 style={{color:"white"}}>To do List</h1>
-
-    <form>
-        <input type="text" value={goal} onChange={goalhandler}/>
-     <button type="submit" onClick={addgoalhandler} style={{background:"white", color:"black", borderRadius:3, marginLeft:5 ,padding:5}}>Add Goal</button> 
-    </form>
-
-        {goallist.length===0 ? (<h4 style={{color:"white"}}>Empty array</h4>): (goallist.map((data,index)=> 
-        <>
-            <div key={index} style={{display:"flex", justifyContent:"space-around", border:"2px solid white", marginBottom:20, marginTop:20}}>
-                <div style={{color:"white"}}>{data} </div>
-               
-                <div><button type="submit"  style={{background:"white", color:"black", borderRadius:3, marginLeft:10,padding:5}}onClick={()=>removehandler(index)}>Remove </button></div>
+    return (
+        <div className="todo-app">
+            <div className="todo-container">
+                <h1>To Do List</h1>
+                <form>
+                    <input type="text" value={goal} onChange={goalHandler} />
+                    <button type="submit" onClick={addGoalHandler} className="add-button">
+                        Add Goal
+                    </button>
+                </form>
+                {goalList.length === 0 ? (
+                    <h4>Empty array</h4>
+                ) : (
+                    <div className="goal-list">
+                        {goalList.map((data, index) => (
+                            <div key={index} className="goal-item">
+                                <span>{data}</span>
+                                <button onClick={() => removeHandler(index)} className="remove-button">
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {goalList.length >= 1 && (
+                    <button onClick={removeAll} className="remove-all-button">
+                        Remove All Goals
+                    </button>
+                )}
             </div>
-            
-        </> 
-         ))}
-
-        {goallist.length>=1 && <button type="submit" style={{background:"white", color:"black", borderRadius:3 ,padding:5}} onClick={removeall}>Remove All  Goal</button>}
-          
-    </div>
-    </div>
-  )
-} 
+        </div>
+    );
+};
